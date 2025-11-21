@@ -1,0 +1,3 @@
+/home/michael/dev/wrdice/src/CMakeFiles/wrdice.dir
+/home/michael/dev/wrdice/src/CMakeFiles/edit_cache.dir
+/home/michael/dev/wrdice/src/CMakeFiles/rebuild_cache.dir

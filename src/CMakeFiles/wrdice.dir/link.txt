@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -shared -Wl,-soname,libwrdice.so -o libwrdice.so CMakeFiles/wrdice.dir/wrdice.c.o 

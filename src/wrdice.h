@@ -19,6 +19,16 @@
 #define FFI_PLUGIN_EXPORT
 #endif
 
+typedef struct{
+    uint32_t vs_air[5];
+    uint32_t vs_gnd[5];
+}DiceDistribution;
+
+typedef struct{
+    DiceDistribution air;
+    DiceDistribution lnd;
+    DiceDistribution sea;
+} Dice;
 
 typedef struct {
     float win_a;

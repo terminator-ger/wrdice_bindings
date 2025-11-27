@@ -129,6 +129,78 @@ wrdice/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/build
 .PHONY : wrdice/fast
 
+battle.o: battle.c.o
+.PHONY : battle.o
+
+# target to build an object file
+battle.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/battle.c.o
+.PHONY : battle.c.o
+
+battle.i: battle.c.i
+.PHONY : battle.i
+
+# target to preprocess a source file
+battle.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/battle.c.i
+.PHONY : battle.c.i
+
+battle.s: battle.c.s
+.PHONY : battle.s
+
+# target to generate assembly for a file
+battle.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/battle.c.s
+.PHONY : battle.c.s
+
+dice_op.o: dice_op.c.o
+.PHONY : dice_op.o
+
+# target to build an object file
+dice_op.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/dice_op.c.o
+.PHONY : dice_op.c.o
+
+dice_op.i: dice_op.c.i
+.PHONY : dice_op.i
+
+# target to preprocess a source file
+dice_op.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/dice_op.c.i
+.PHONY : dice_op.c.i
+
+dice_op.s: dice_op.c.s
+.PHONY : dice_op.s
+
+# target to generate assembly for a file
+dice_op.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/dice_op.c.s
+.PHONY : dice_op.c.s
+
+stats.o: stats.c.o
+.PHONY : stats.o
+
+# target to build an object file
+stats.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/stats.c.o
+.PHONY : stats.c.o
+
+stats.i: stats.c.i
+.PHONY : stats.i
+
+# target to preprocess a source file
+stats.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/stats.c.i
+.PHONY : stats.c.i
+
+stats.s: stats.c.s
+.PHONY : stats.s
+
+# target to generate assembly for a file
+stats.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wrdice.dir/build.make CMakeFiles/wrdice.dir/stats.c.s
+.PHONY : stats.c.s
+
 wrdice.o: wrdice.c.o
 .PHONY : wrdice.o
 
@@ -162,6 +234,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... wrdice"
+	@echo "... battle.o"
+	@echo "... battle.i"
+	@echo "... battle.s"
+	@echo "... dice_op.o"
+	@echo "... dice_op.i"
+	@echo "... dice_op.s"
+	@echo "... stats.o"
+	@echo "... stats.i"
+	@echo "... stats.s"
 	@echo "... wrdice.o"
 	@echo "... wrdice.i"
 	@echo "... wrdice.s"

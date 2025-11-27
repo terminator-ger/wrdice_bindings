@@ -11,15 +11,6 @@ import 'wrdice_bindings_generated.dart';
 // ───────────────────────────────────────────────
 //
 
-// C: void run_simulation(const Army*, const Army*, SimStats*, bool, bool)
-typedef _RunSimulationNative = Void Function(
-  Pointer<Army> armyA,
-  Pointer<Army> armyB,
-  Pointer<SimStats> stats,
-  Uint8 withForceAdvantage,  // bool → uint8
-  Uint8 withBatchCap,        // bool → uint8
-);
-
 typedef RunSimulation = void Function(
   Pointer<Army> armyA,
   Pointer<Army> armyB,
@@ -98,7 +89,15 @@ class DartArmy{
   late final List<int> stanceAirDef;
   late final List<int> stanceSeaOff;
   late final List<int> stanceSeaDef;
-  DartArmy(this.unitsLnd, this.unitsSea, this.unitsAir, this.stanceLndOff, this.stanceLndDef, this.stanceAirOff, this.stanceAirDef, this.stanceSeaOff, this.stanceSeaDef);
+  DartArmy(this.unitsLnd, 
+           this.unitsAir, 
+           this.unitsSea,
+           this.stanceLndOff, 
+           this.stanceLndDef, 
+           this.stanceAirOff, 
+           this.stanceAirDef, 
+           this.stanceSeaOff, 
+           this.stanceSeaDef);
 }
 
 /// Fills an Army struct from Dart lists
@@ -124,8 +123,8 @@ void fillArmy(Pointer<Army> armyPtr, DartArmy army){
     army_.n_units_sea[i] = army.unitsSea[i];
   }
   _fillStance(army_.stance_lnd, army.stanceLndOff, army.stanceLndDef);
-  _fillStance(army_.stance_lnd, army.stanceLndOff, army.stanceLndDef);
- 
+  _fillStance(army_.stance_air, army.stanceAirOff, army.stanceAirDef);
+  _fillStance(army_.stance_sea, army.stanceSeaOff, army.stanceSeaDef);
 }
 
 void fillArmyFromLists(
@@ -232,6 +231,25 @@ class DartSimStats {
   });
 }
 
+class DartDiceDistribution{
+  final List<int> vs_air;
+  final List<int> vs_gnd;
+  DartDiceDistribution({
+    required this.vs_air,
+    required this.vs_gnd
+  });
+}
+
+class DartDice{
+  final DartDiceDistribution air;
+  final DartDiceDistribution lnd;
+  final DartDiceDistribution sea;
+  DartDice({
+    required this.air,
+    required this.lnd,
+    required this.sea
+  });
+}
 
 
 // ─────────────────────────────
@@ -267,6 +285,26 @@ DartStats _toStats(Stats st) {
   );
 }
 
+DartDiceDistribution _toDartDiceDistribution(DiceDistribution dd){
+  return DartDiceDistribution(vs_air: dd.vs_air.toList(5), 
+                              vs_gnd: dd.vs_gnd.toList(5));
+}
+
+DartDice _toDartDice(Pointer<Dice> dice){
+  return DartDice(air: _toDartDiceDistribution(dice.ref.air),
+                  lnd: _toDartDiceDistribution(dice.ref.lnd),
+                  sea: _toDartDiceDistribution(dice.ref.sea));
+}
+
+DartDice calculateDice(Pointer<Army> army){
+  BattleSimLib lib = BattleSimLib();
+  final ddPtr = calloc<Dice>();
+  lib._bindings.get_dice_for_army(army, ddPtr);
+  DartDice dd = _toDartDice(ddPtr);
+  calloc.free(ddPtr);
+  return dd;
+}
+
 DartSimStats toDartSimStats(Pointer<SimStats> ptr) {
   final ref = ptr.ref;
 
@@ -277,7 +315,6 @@ DartSimStats toDartSimStats(Pointer<SimStats> ptr) {
     br: _toBattleResult(ref.br),
   );
 }
-
 
 DartBattleResponse runBattleSim(
   BattleSimLib lib,
@@ -376,4 +413,10 @@ Future<DartSimStats> runBattleAsync(DartArmy da, DartArmy db, bool fa, bool bc) 
   _battleRequest[requestId] = completer;
   helperIsolateSendPort.send(request);
   return completer.future;
+}
+
+DartDice updateDice(DartArmy army){
+  final Pointer<Army> a = calloc<Army>();
+  fillArmy(a, army);
+  return calculateDice(a);
 }

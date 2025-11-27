@@ -1,6 +1,5 @@
 #include "battle.h"
 
-
 static inline int roll_die(void){
     return (uint64_t) rand() * 12 / RAND_MAX;
 }
@@ -36,8 +35,15 @@ void roll_batch(int n_dice, uint32_t results[6]){
 int get_dice_air(const Army* army){
     int n_dice = 0;
     for(int tvpe=0; tvpe<5; tvpe++){
+        // dice form air
         n_dice += (army->stance_air.stance_off[tvpe] * air_vs_air_stance_off[tvpe]);
         n_dice += (army->stance_air.stance_def[tvpe] * air_vs_air_stance_def[tvpe]);
+        // dice from lnd
+        n_dice += (army->stance_lnd.stance_off[tvpe] * lnd_vs_air_stance_off[tvpe]);
+        n_dice += (army->stance_lnd.stance_def[tvpe] * lnd_vs_air_stance_def[tvpe]);
+        // dice from sea
+        n_dice += (army->stance_sea.stance_off[tvpe] * sea_vs_air_stance_off[tvpe]);
+        n_dice += (army->stance_sea.stance_def[tvpe] * sea_vs_air_stance_def[tvpe]);
     }
     return n_dice;
 }
@@ -57,4 +63,29 @@ int get_dice_ground(const Army* army){
         n_dice += (army->stance_sea.stance_def[tvpe] * sea_vs_ground_stance_def[tvpe]);
     }
     return n_dice;
+}
+
+void get_dice_for_army(const Army* army, Dice* dice){
+    for(int tvpe=0; tvpe<5; tvpe++){
+        // dice for air
+        dice->air.vs_air[tvpe] =  (army->stance_air.stance_off[tvpe] * air_vs_air_stance_off[tvpe]);
+        dice->air.vs_air[tvpe] += (army->stance_air.stance_def[tvpe] * air_vs_air_stance_def[tvpe]);
+
+        dice->air.vs_gnd[tvpe] =  (army->stance_air.stance_off[tvpe] * air_vs_ground_stance_off[tvpe]);
+        dice->air.vs_gnd[tvpe] += (army->stance_air.stance_def[tvpe] * air_vs_ground_stance_def[tvpe]);
+        
+        // dice for lnd
+        dice->lnd.vs_air[tvpe] =  (army->stance_lnd.stance_off[tvpe] * lnd_vs_air_stance_off[tvpe]);
+        dice->lnd.vs_air[tvpe] += (army->stance_lnd.stance_def[tvpe] * lnd_vs_air_stance_def[tvpe]);
+        
+        dice->lnd.vs_gnd[tvpe] =  (army->stance_lnd.stance_off[tvpe] * lnd_vs_ground_stance_off[tvpe]);
+        dice->lnd.vs_gnd[tvpe] += (army->stance_lnd.stance_def[tvpe] * lnd_vs_ground_stance_def[tvpe]);
+        
+        // dice for sea
+        dice->sea.vs_air[tvpe] =  (army->stance_sea.stance_off[tvpe] * sea_vs_air_stance_off[tvpe]);
+        dice->sea.vs_air[tvpe] += (army->stance_sea.stance_def[tvpe] * sea_vs_air_stance_def[tvpe]);
+        
+        dice->sea.vs_gnd[tvpe] =  (army->stance_sea.stance_off[tvpe] * sea_vs_ground_stance_off[tvpe]);
+        dice->sea.vs_gnd[tvpe] += (army->stance_sea.stance_def[tvpe] * sea_vs_ground_stance_def[tvpe]);
+    }
 }

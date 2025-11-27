@@ -132,6 +132,7 @@ static void apply_batch_cap(const Army* restrict aa, const Army* restrict ab, in
     }
 }
 
+
 void simulate_battle(const Army* restrict army_a, 
                      const Army* restrict army_b, 
                      SimStats* restrict   stats,

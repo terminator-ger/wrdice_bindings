@@ -9,6 +9,12 @@
 
 #include "unit_values.h"
 #include "vec_op.h"
+#if _WIN32
+#define FFI_PLUGIN_EXPORT __declspec(dllexport)
+#else
+#define FFI_PLUGIN_EXPORT
+#endif
+
 
 void update_stats_counts(Survived stats[5], int N);
 void simulate_battle(const Army* restrict army_a, 

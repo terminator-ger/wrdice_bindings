@@ -26,47 +26,18 @@ class WrdiceBindings {
     ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) lookup,
   ) : _lookup = lookup;
 
-  ffi.Pointer<Army> alloc_army() {
-    return _alloc_army();
+  void get_dice_for_army(ffi.Pointer<Army> army, ffi.Pointer<Dice> dice) {
+    return _get_dice_for_army(army, dice);
   }
 
-  late final _alloc_armyPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<Army> Function()>>('alloc_army');
-  late final _alloc_army = _alloc_armyPtr
-      .asFunction<ffi.Pointer<Army> Function()>();
-
-  ffi.Pointer<SimStats> alloc_simstats() {
-    return _alloc_simstats();
-  }
-
-  late final _alloc_simstatsPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<SimStats> Function()>>(
-        'alloc_simstats',
-      );
-  late final _alloc_simstats = _alloc_simstatsPtr
-      .asFunction<ffi.Pointer<SimStats> Function()>();
-
-  void free_army(ffi.Pointer<Army> army) {
-    return _free_army(army);
-  }
-
-  late final _free_armyPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Army>)>>(
-        'free_army',
-      );
-  late final _free_army = _free_armyPtr
-      .asFunction<void Function(ffi.Pointer<Army>)>();
-
-  void free_simstats(ffi.Pointer<SimStats> stats) {
-    return _free_simstats(stats);
-  }
-
-  late final _free_simstatsPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<SimStats>)>>(
-        'free_simstats',
-      );
-  late final _free_simstats = _free_simstatsPtr
-      .asFunction<void Function(ffi.Pointer<SimStats>)>();
+  late final _get_dice_for_armyPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<Army>, ffi.Pointer<Dice>)
+        >
+      >('get_dice_for_army');
+  late final _get_dice_for_army = _get_dice_for_armyPtr
+      .asFunction<void Function(ffi.Pointer<Army>, ffi.Pointer<Dice>)>();
 
   void run_simulation(
     ffi.Pointer<Army> army_a,
@@ -191,4 +162,20 @@ final class ArmyHP extends ffi.Struct {
   external HP air;
 
   external HP sea;
+}
+
+final class DiceDistribution extends ffi.Struct {
+  @ffi.Array.multi([5])
+  external ffi.Array<ffi.Uint32> vs_air;
+
+  @ffi.Array.multi([5])
+  external ffi.Array<ffi.Uint32> vs_gnd;
+}
+
+final class Dice extends ffi.Struct {
+  external DiceDistribution air;
+
+  external DiceDistribution lnd;
+
+  external DiceDistribution sea;
 }

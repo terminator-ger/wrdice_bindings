@@ -88,4 +88,6 @@ void get_dice_for_army(const Army* army, Dice* dice){
         dice->sea.vs_gnd[tvpe] =  (army->stance_sea.stance_off[tvpe] * sea_vs_ground_stance_off[tvpe]);
         dice->sea.vs_gnd[tvpe] += (army->stance_sea.stance_def[tvpe] * sea_vs_ground_stance_def[tvpe]);
     }
+    dice->total[0] = (uint32_t) get_dice_air(army);
+    dice->total[1] = (uint32_t) get_dice_ground(army);
 }

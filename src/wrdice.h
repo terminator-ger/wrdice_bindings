@@ -28,6 +28,7 @@ typedef struct{
     DiceDistribution air;
     DiceDistribution lnd;
     DiceDistribution sea;
+    uint32_t total[2];
 } Dice;
 
 typedef struct {
@@ -86,6 +87,6 @@ FFI_PLUGIN_EXPORT void run_simulation(const Army* restrict army_a,
                                       SimStats*   restrict stats,
                                       bool                 with_force_advantage,
                                       bool                 with_batch_cap);
- 
+FFI_PLUGIN_EXPORT void get_dice_for_army(const Army* restrict army, Dice* dice); 
 
 #endif

@@ -26,19 +26,6 @@ class WrdiceBindings {
     ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) lookup,
   ) : _lookup = lookup;
 
-  void get_dice_for_army(ffi.Pointer<Army> army, ffi.Pointer<Dice> dice) {
-    return _get_dice_for_army(army, dice);
-  }
-
-  late final _get_dice_for_armyPtr =
-      _lookup<
-        ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<Army>, ffi.Pointer<Dice>)
-        >
-      >('get_dice_for_army');
-  late final _get_dice_for_army = _get_dice_for_armyPtr
-      .asFunction<void Function(ffi.Pointer<Army>, ffi.Pointer<Dice>)>();
-
   void run_simulation(
     ffi.Pointer<Army> army_a,
     ffi.Pointer<Army> army_b,
@@ -77,6 +64,38 @@ class WrdiceBindings {
           bool,
         )
       >();
+
+  void get_dice_for_army(ffi.Pointer<Army> army, ffi.Pointer<Dice> dice) {
+    return _get_dice_for_army(army, dice);
+  }
+
+  late final _get_dice_for_armyPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<Army>, ffi.Pointer<Dice>)
+        >
+      >('get_dice_for_army');
+  late final _get_dice_for_army = _get_dice_for_armyPtr
+      .asFunction<void Function(ffi.Pointer<Army>, ffi.Pointer<Dice>)>();
+}
+
+final class DiceDistribution extends ffi.Struct {
+  @ffi.Array.multi([5])
+  external ffi.Array<ffi.Uint32> vs_air;
+
+  @ffi.Array.multi([5])
+  external ffi.Array<ffi.Uint32> vs_gnd;
+}
+
+final class Dice extends ffi.Struct {
+  external DiceDistribution air;
+
+  external DiceDistribution lnd;
+
+  external DiceDistribution sea;
+
+  @ffi.Array.multi([2])
+  external ffi.Array<ffi.Uint32> total;
 }
 
 final class BattleResult extends ffi.Struct {
@@ -162,20 +181,4 @@ final class ArmyHP extends ffi.Struct {
   external HP air;
 
   external HP sea;
-}
-
-final class DiceDistribution extends ffi.Struct {
-  @ffi.Array.multi([5])
-  external ffi.Array<ffi.Uint32> vs_air;
-
-  @ffi.Array.multi([5])
-  external ffi.Array<ffi.Uint32> vs_gnd;
-}
-
-final class Dice extends ffi.Struct {
-  external DiceDistribution air;
-
-  external DiceDistribution lnd;
-
-  external DiceDistribution sea;
 }

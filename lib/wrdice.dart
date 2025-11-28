@@ -244,10 +244,12 @@ class DartDice{
   final DartDiceDistribution air;
   final DartDiceDistribution lnd;
   final DartDiceDistribution sea;
+  final List<int> total;
   DartDice({
     required this.air,
     required this.lnd,
-    required this.sea
+    required this.sea,
+    required this.total
   });
 }
 
@@ -293,7 +295,8 @@ DartDiceDistribution _toDartDiceDistribution(DiceDistribution dd){
 DartDice _toDartDice(Pointer<Dice> dice){
   return DartDice(air: _toDartDiceDistribution(dice.ref.air),
                   lnd: _toDartDiceDistribution(dice.ref.lnd),
-                  sea: _toDartDiceDistribution(dice.ref.sea));
+                  sea: _toDartDiceDistribution(dice.ref.sea),
+                  total: dice.ref.total.toList(2));
 }
 
 DartDice calculateDice(Pointer<Army> army){

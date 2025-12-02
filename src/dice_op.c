@@ -32,8 +32,8 @@ void roll_batch(int n_dice, uint32_t results[6]){
 }
 
 
-int get_dice_air(const Army* army){
-    int n_dice = 0;
+uint32_t get_dice_air(const Army* army){
+    uint32_t n_dice = 0;
     for(int tvpe=0; tvpe<5; tvpe++){
         // dice form air
         n_dice += (army->stance_air.stance_off[tvpe] * air_vs_air_stance_off[tvpe]);
@@ -49,8 +49,8 @@ int get_dice_air(const Army* army){
 }
 
 
-int get_dice_ground(const Army* army){
-    int n_dice = 0;
+uint32_t get_dice_ground(const Army* army){
+    uint32_t n_dice = 0;
     for(int tvpe=0; tvpe<5; tvpe++){
         // dice from air
         n_dice += (army->stance_air.stance_off[tvpe] * air_vs_ground_stance_off[tvpe]);
@@ -87,7 +87,22 @@ void get_dice_for_army(const Army* army, Dice* dice){
         
         dice->sea.vs_gnd[tvpe] =  (army->stance_sea.stance_off[tvpe] * sea_vs_ground_stance_off[tvpe]);
         dice->sea.vs_gnd[tvpe] += (army->stance_sea.stance_def[tvpe] * sea_vs_ground_stance_def[tvpe]);
-    }
-    dice->total[0] = (uint32_t) get_dice_air(army);
-    dice->total[1] = (uint32_t) get_dice_ground(army);
+   }
+    CLIP_VEC(dice->air.vs_air, 5, 0, 30);
+    CLIP_VEC(dice->air.vs_gnd, 5, 0, 30);
+    CLIP_VEC(dice->lnd.vs_air, 5, 0, 30);
+    CLIP_VEC(dice->lnd.vs_gnd, 5, 0, 30);
+    CLIP_VEC(dice->sea.vs_air, 5, 0, 30);
+    CLIP_VEC(dice->sea.vs_gnd, 5, 0, 30);
+ 
+    dice->total[0] = CLIP(get_dice_air(army), 0, 30);
+    dice->total[1] = CLIP(get_dice_ground(army), 0, 30);
+}
+
+void get_dice_for_armies(const Army* army_a, Dice* dice_a, 
+                         const Army* army_b, Dice* dice_b, 
+                         bool with_batch_cap){
+    get_dice_for_army(army_a, dice_a);
+    get_dice_for_army(army_b, dice_b);
+    apply_batch_cap(army_a, army_b, (int*)&dice_a->total[1], (int*)&dice_b->total[1]);
 }

@@ -308,6 +308,8 @@ DartDice calculateDice(Pointer<Army> army){
   return dd;
 }
 
+
+
 DartSimStats toDartSimStats(Pointer<SimStats> ptr) {
   final ref = ptr.ref;
 
@@ -422,4 +424,20 @@ DartDice updateDice(DartArmy army){
   final Pointer<Army> a = calloc<Army>();
   fillArmy(a, army);
   return calculateDice(a);
+}
+
+List<DartDice> updateDiceWithBatchCap(DartArmy army_a, DartArmy army_b, bool withBatchCap){
+  final Pointer<Army> a = calloc<Army>();
+  final Pointer<Army> b = calloc<Army>();
+  final da = calloc<Dice>();
+  final db = calloc<Dice>();
+  fillArmy(a, army_a);
+  fillArmy(b, army_b);
+  BattleSimLib lib = BattleSimLib();
+  lib._bindings.get_dice_for_armies(a, da, b, db, withBatchCap);
+  DartDice dda = _toDartDice(da);
+  DartDice ddb = _toDartDice(db);
+  calloc.free(da);
+  calloc.free(db);
+  return [dda, ddb];
 }

@@ -77,6 +77,39 @@ class WrdiceBindings {
       >('get_dice_for_army');
   late final _get_dice_for_army = _get_dice_for_armyPtr
       .asFunction<void Function(ffi.Pointer<Army>, ffi.Pointer<Dice>)>();
+
+  void get_dice_for_armies(
+    ffi.Pointer<Army> army_a,
+    ffi.Pointer<Dice> dice_a,
+    ffi.Pointer<Army> army_b,
+    ffi.Pointer<Dice> dice_b,
+    bool batch_cap,
+  ) {
+    return _get_dice_for_armies(army_a, dice_a, army_b, dice_b, batch_cap);
+  }
+
+  late final _get_dice_for_armiesPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Pointer<Army>,
+            ffi.Pointer<Dice>,
+            ffi.Pointer<Army>,
+            ffi.Pointer<Dice>,
+            ffi.Bool,
+          )
+        >
+      >('get_dice_for_armies');
+  late final _get_dice_for_armies = _get_dice_for_armiesPtr
+      .asFunction<
+        void Function(
+          ffi.Pointer<Army>,
+          ffi.Pointer<Dice>,
+          ffi.Pointer<Army>,
+          ffi.Pointer<Dice>,
+          bool,
+        )
+      >();
 }
 
 final class DiceDistribution extends ffi.Struct {

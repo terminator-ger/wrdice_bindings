@@ -88,5 +88,7 @@ FFI_PLUGIN_EXPORT void run_simulation(const Army* restrict army_a,
                                       bool                 with_force_advantage,
                                       bool                 with_batch_cap);
 FFI_PLUGIN_EXPORT void get_dice_for_army(const Army* restrict army, Dice* dice); 
+FFI_PLUGIN_EXPORT void get_dice_for_armies(const Army* restrict army_a, Dice* dice_a,
+                                           const Army* restrict army_b, Dice* dice_b, bool batch_cap);
 
 #endif

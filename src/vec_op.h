@@ -13,6 +13,12 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define CLIP(a, l, u) (MAX(l, MIN(a, u)))
 
+static inline void CLIP_VEC(uint32_t* v, int lenght, int lower, int upper){
+    for(int i=0; i<lenght; i++){
+        CLIP(v[i], lower, upper);
+    }
+}
+
 static inline int div_ceil(int nom, int denom){
     return denom ? ((nom + denom - 1) / denom) : 0;
 }

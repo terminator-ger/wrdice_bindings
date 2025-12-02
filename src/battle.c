@@ -113,7 +113,7 @@ static void battle_sea(ArmyHP* restrict ahpa, ArmyHP* restrict ahpb, uint32_t hi
 }
 
 
-static void apply_batch_cap(const Army* restrict aa, const Army* restrict ab, int* dice_a, int* dice_b){
+void apply_batch_cap(const Army* restrict aa, const Army* restrict ab, int* dice_a, int* dice_b){
     int unit_types_a = vec_n_components(aa->n_units_lnd, 3);
     int unit_types_b = vec_n_components(ab->n_units_lnd, 3);
     switch(unit_types_a-unit_types_b){

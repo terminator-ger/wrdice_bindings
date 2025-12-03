@@ -65,6 +65,7 @@ typedef struct{
     uint32_t n_units_lnd[5];
     uint32_t n_units_air[5];
     uint32_t n_units_sea[5];
+    uint32_t escaped_subs;
     Stance   stance_lnd;
     Stance   stance_air;
     Stance   stance_sea;

@@ -42,8 +42,15 @@ void udpate_statistics(const Army* restrict army_a, const Army* restrict army_b,
     }
 
     // Win - Loss Distribution
-    bool surv_a = vec_n_components(army_a->n_units_lnd, 3) > 0 ? true : false;
-    bool surv_b = vec_n_components(army_b->n_units_lnd, 3) > 0 ? true : false;
+    bool surv_a_lnd = vec_n_components(army_a->n_units_lnd, 3) > 0 ? true : false;
+    bool surv_b_lnd = vec_n_components(army_b->n_units_lnd, 3) > 0 ? true : false;
+ 
+    bool surv_a_sea = vec_n_components(army_a->n_units_sea, 4) > 0 ? true : false;
+    bool surv_b_sea = vec_n_components(army_b->n_units_sea, 4) > 0 ? true : false;
+    
+    bool surv_a = surv_a_lnd || surv_a_sea; 
+    bool surv_b = surv_b_lnd || surv_b_sea; 
+
     if (surv_a && ! surv_b){
         stats->br.win_a += 1;
     }else if (!surv_a && surv_b){
@@ -70,6 +77,7 @@ void update_escaped_subs(ArmyHP* restrict ahp, int* restrict escaped_subs){
 
 void add_escaped_subs(Army* restrict army, const int* restrict esc_subs){
     army->n_units_sea[0] += *esc_subs;
+    army->escaped_subs += *esc_subs;
 }
 
 

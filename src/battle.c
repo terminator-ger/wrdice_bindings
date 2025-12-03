@@ -200,11 +200,11 @@ void simulate_battle(const Army* restrict army_a,
     //update unit count 
     update_unit_count(&aa, &ahpa);
     update_unit_count(&ab, &ahpb);
-    add_escaped_subs(&aa, &escaped_subs[0]);
-    add_escaped_subs(&ab, &escaped_subs[1]);
-
+    
     udpate_statistics(&aa, &ab, stats);
     
+    add_escaped_subs(&aa, &escaped_subs[0]);
+    add_escaped_subs(&ab, &escaped_subs[1]);
 }
 
 void update_force_advantage(Army* restrict aa, Army* restrict ab, bool fa[2]){

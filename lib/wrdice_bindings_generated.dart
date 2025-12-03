@@ -193,6 +193,9 @@ final class Army extends ffi.Struct {
   @ffi.Array.multi([5])
   external ffi.Array<ffi.Uint32> n_units_sea;
 
+  @ffi.Uint32()
+  external int escaped_subs;
+
   external Stance stance_lnd;
 
   external Stance stance_air;

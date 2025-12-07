@@ -9,7 +9,8 @@ static void battle_air(ArmyHP* restrict ahpa, ArmyHP* restrict ahpb, uint32_t hi
     vec_sub_to_0_hp(ahpa->air.hp_stance_def, hits_b, 4);
     vec_sub_to_0_hp(ahpb->air.hp_stance_def, hits_a, 4);
 
-    //black and white results
+    // black and white results
+    // order bomber off -> bomber strat -> fighter off(gnd) -> fighter def(air)
     int priority[2] = {4,3};
     int offset[2] = {4,5};
     for (int bw=0; bw<2; bw++){

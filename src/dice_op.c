@@ -104,5 +104,7 @@ void get_dice_for_armies(const Army* army_a, Dice* dice_a,
                          bool with_batch_cap){
     get_dice_for_army(army_a, dice_a);
     get_dice_for_army(army_b, dice_b);
-    apply_batch_cap(army_a, army_b, (int*)&dice_a->total[1], (int*)&dice_b->total[1]);
+    if (with_batch_cap){
+        apply_batch_cap(army_a, army_b, (int*)&dice_a->total[1], (int*)&dice_b->total[1]);
+    }
 }

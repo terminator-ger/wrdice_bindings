@@ -426,13 +426,13 @@ DartDice updateDice(DartArmy army){
   return calculateDice(a);
 }
 
-List<DartDice> updateDiceWithBatchCap(DartArmy army_a, DartArmy army_b, bool withBatchCap){
+List<DartDice> updateDiceWithBatchCap(DartArmy armyA, DartArmy armyB, bool withBatchCap){
   final Pointer<Army> a = calloc<Army>();
   final Pointer<Army> b = calloc<Army>();
   final da = calloc<Dice>();
   final db = calloc<Dice>();
-  fillArmy(a, army_a);
-  fillArmy(b, army_b);
+  fillArmy(a, armyA);
+  fillArmy(b, armyB);
   BattleSimLib lib = BattleSimLib();
   lib._bindings.get_dice_for_armies(a, da, b, db, withBatchCap);
   DartDice dda = _toDartDice(da);

@@ -134,7 +134,7 @@ void apply_batch_cap(const Army *restrict aa, const Army *restrict ab, int *dice
     int unit_types_b_sea = vec_n_components(ab->n_units_sea, 4);
     int diff_lnd = unit_types_a_lnd - unit_types_b_lnd;
     int diff_sea = unit_types_a_sea - unit_types_b_sea;
-    int diff = max(diff_lnd, diff_sea);
+    int diff = fmax(diff_lnd, diff_sea);
     switch (diff)
     {
     case 1:

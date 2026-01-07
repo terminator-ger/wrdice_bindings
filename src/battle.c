@@ -136,6 +136,7 @@ void apply_batch_cap(const Army *restrict aa, const Army *restrict ab, int *dice
 
     int unit_types_a_sea = vec_n_components(aa->n_units_sea, 4);
     int unit_types_b_sea = vec_n_components(ab->n_units_sea, 4);
+
     int diff_lnd = unit_types_a_lnd - unit_types_b_lnd;
     int diff_sea = unit_types_a_sea - unit_types_b_sea;
     int diff = diff_lnd ? diff_lnd != 0 : diff_sea;
@@ -146,6 +147,7 @@ void apply_batch_cap(const Army *restrict aa, const Army *restrict ab, int *dice
         break;
     case 2:
     case 3:
+    case 4:
         *dice_b = MIN(*dice_b, 10);
         break;
     case -1:
@@ -153,6 +155,7 @@ void apply_batch_cap(const Army *restrict aa, const Army *restrict ab, int *dice
         break;
     case -2:
     case -3:
+    case -4:
         *dice_a = MIN(*dice_a, 10);
         break;
     }
@@ -236,17 +239,21 @@ void simulate_battle(const Army *restrict army_a,
 
 void update_force_advantage(Army *restrict aa, Army *restrict ab, bool fa[2])
 {
-    int unit_types_a = vec_n_components(aa->n_units_lnd, 3);
-    int unit_types_b = vec_n_components(ab->n_units_lnd, 3);
-    if (unit_types_a > unit_types_b)
+    int unit_types_a_lnd = vec_n_components(aa->n_units_lnd, 3);
+    int unit_types_b_lnd = vec_n_components(ab->n_units_lnd, 3);
+    
+    int unit_types_a_sea = vec_n_components(aa->n_units_sea, 4);
+    int unit_types_b_sea = vec_n_components(ab->n_units_sea, 4);
+
+    if (unit_types_a_lnd > unit_types_b_lnd || unit_types_a_sea > unit_types_b_sea)
     {
         fa[0] = true;
     }
-    else if (unit_types_b > unit_types_a)
+    else if (unit_types_b_lnd > unit_types_a_lnd || unit_types_b_sea > unit_types_a_sea)
     {
         fa[1] = true;
     }
-    else if (unit_types_a == unit_types_b)
+    else if (unit_types_a_lnd == unit_types_b_lnd || unit_types_a_sea == unit_types_b_sea)
     {
         fa[0] = true;
         fa[1] = true;

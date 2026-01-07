@@ -1,4 +1,5 @@
 #include "battle.h"
+#include "stats.h"
 
 static void battle_air(ArmyHP *restrict ahpa, ArmyHP *restrict ahpb, uint32_t hits_a[6], uint32_t hits_b[6])
 {
@@ -64,33 +65,35 @@ static void battle_lnd(ArmyHP *restrict ahpa, ArmyHP *restrict ahpb, uint32_t hi
 static void apply_dice_sea(ArmyHP *ahp, uint32_t hits[6], bool has_fa)
 {
     // ############################################
-    // subs and escord direct hits
+    // apply all subs and escord direct hits
     vec_sub_to_0_hp(ahp->sea.hp_stance_off, hits, 2);
     vec_sub_to_0_hp(ahp->sea.hp_stance_def, hits, 2);
-    bool has_escort = false;
-    if (ahp->sea.hp_stance_def[1] > 0)
-        has_escort = true;
+
+    bool has_escort = true ? (ahp->sea.hp_stance_def[1] > 0) : false;
 
     if (has_escort)
     {
         // damage ships to one hp then apply rest to escort then rest to original target
-        vec_sub_to_1_hp(ahp->sea.hp_stance_off + 2, hits + 2, 1, sea_hp_stance_off[2]);
-        vec_sub_to_1_hp(ahp->sea.hp_stance_def + 2, hits + 2, 1, sea_hp_stance_def[2]);
-
-        vec_sub_to_1_hp(ahp->sea.hp_stance_off + 3, hits + 3, 1, sea_hp_stance_off[3]);
-        vec_sub_to_1_hp(ahp->sea.hp_stance_def + 3, hits + 3, 1, sea_hp_stance_def[3]);
-
+        for (int idx = 3; idx > 1; idx--)
+        {
+            // inverse order -> use escorts for battleships
+            vec_sub_to_1_hp(ahp->sea.hp_stance_off + idx, hits + idx, 1, sea_hp_stance_off[idx]);
+            vec_sub_to_1_hp(ahp->sea.hp_stance_def + idx, hits + idx, 1, sea_hp_stance_def[idx]);
+        }
         // apply to escort for cv and battleship
         vec_sub_to_0_hp(ahp->sea.hp_stance_def + 1, hits + 2, 1);
         vec_sub_to_0_hp(ahp->sea.hp_stance_def + 1, hits + 3, 1);
     }
-    // apply rest
-    vec_sub_to_0_hp(ahp->sea.hp_stance_off + 2, hits + 2, 2);
-    vec_sub_to_0_hp(ahp->sea.hp_stance_def + 2, hits + 2, 2);
+    // apply remaining hits to original targets
+    for (int idx = 2; idx < 4; idx++)
+    {
+        vec_sub_to_0_hp(ahp->sea.hp_stance_off + idx, hits + idx, idx);
+        vec_sub_to_0_hp(ahp->sea.hp_stance_def + idx, hits + idx, idx);
+    }
 
     if (has_fa)
     {
-        // black dice
+        // black dice prio subs, white dice regular order
         int priority[2][4] = {{4, 3, 1, 2}, {4, 3, 2}};
         int p_size[2] = {4, 3};
         int dice_offset[2] = {4, 5};
@@ -110,6 +113,7 @@ static void apply_dice_sea(ArmyHP *ahp, uint32_t hits[6], bool has_fa)
                 vec_sub_to_0_hp(ahp->sea.hp_stance_def + 1, hits + offset, 1);
             }
             // apply rest
+            // TODO: add logic to kill off ships when on last batch
             for (int i = 0; i < p_size[wb]; i++)
             {
                 int p = priority[wb][i];
@@ -134,7 +138,7 @@ void apply_batch_cap(const Army *restrict aa, const Army *restrict ab, int *dice
     int unit_types_b_sea = vec_n_components(ab->n_units_sea, 4);
     int diff_lnd = unit_types_a_lnd - unit_types_b_lnd;
     int diff_sea = unit_types_a_sea - unit_types_b_sea;
-    int diff = fmax(diff_lnd, diff_sea);
+    int diff = diff_lnd ? diff_lnd != 0 : diff_sea;
     switch (diff)
     {
     case 1:
@@ -164,8 +168,8 @@ void simulate_battle(const Army *restrict army_a,
     Army ab = *army_b;
     ArmyHP ahpa = {};
     ArmyHP ahpb = {};
-    army_to_hp(army_a, &ahpa);
-    army_to_hp(army_b, &ahpb);
+    army_to_hp(&aa, &ahpa);
+    army_to_hp(&ab, &ahpb);
     int escaped_subs[2] = {0, 0};
 
     int n_dice_army_a_air = CLIP(get_dice_air(&aa), 0, 30);

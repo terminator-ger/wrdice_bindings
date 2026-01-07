@@ -21,6 +21,10 @@ src/C_WRDICE
 *.ipr
 *.iws
 .idea/
+CMakeFiles
+src/*.o
+src/*.so
+src/*.sh
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -35,3 +39,7 @@ src/C_WRDICE
 .flutter-plugins-dependencies
 /build/
 /coverage/
+src/Makefile
+src/libwrdice.so
+src/cmake_install.cmake
+src/libwrdice.so

@@ -139,7 +139,12 @@ void apply_batch_cap(const Army *restrict aa, const Army *restrict ab, int *dice
 
     int diff_lnd = unit_types_a_lnd - unit_types_b_lnd;
     int diff_sea = unit_types_a_sea - unit_types_b_sea;
-    int diff = diff_lnd ? diff_lnd != 0 : diff_sea;
+    int diff = 0;
+    if (unit_types_a_sea==0 && unit_types_b_sea==0){
+        diff = diff_lnd;
+    }else{
+        diff = diff_sea;
+    }
     switch (diff)
     {
     case 1:

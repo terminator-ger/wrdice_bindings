@@ -13,25 +13,31 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define CLIP(a, l, u) (MAX(l, MIN(a, u)))
 
-static inline void CLIP_VEC(uint32_t* v, int lenght, int lower, int upper){
-    for(int i=0; i<lenght; i++){
+static inline void CLIP_VEC(uint32_t *v, int lenght, int lower, int upper)
+{
+    for (int i = 0; i < lenght; i++)
+    {
         CLIP(v[i], lower, upper);
     }
 }
 
-static inline int div_ceil(int nom, int denom){
+static inline int div_ceil(int nom, int denom)
+{
     return denom ? ((nom + denom - 1) / denom) : 0;
 }
 
-static inline void vec_min(int* array, int size, int lower){
-    for(int i = 0; i < size; i++){
+static inline void vec_min(int *array, int size, int lower)
+{
+    for (int i = 0; i < size; i++)
+    {
         array[i] = MAX(lower, array[i]);
     }
 }
 
-
-static inline void army_to_hp(const Army* army, ArmyHP* ahp){
-    for(int tvpe=0; tvpe<5;tvpe++){
+static inline void army_to_hp(const Army *army, ArmyHP *ahp)
+{
+    for (int tvpe = 0; tvpe < 5; tvpe++)
+    {
         ahp->lnd.hp_stance_off[tvpe] += (army->stance_lnd.stance_off[tvpe] * lnd_hp_stance_off[tvpe]);
         ahp->lnd.hp_stance_def[tvpe] += (army->stance_lnd.stance_def[tvpe] * lnd_hp_stance_def[tvpe]);
 
@@ -43,36 +49,43 @@ static inline void army_to_hp(const Army* army, ArmyHP* ahp){
     }
 }
 
-
-static inline void vec_div_scalar(float* restrict left, const uint32_t* restrict right, int scalar, int n){
-    float f = 1.0/scalar;
-    for (int i = 0; i < n; i++){
-        left[i] =  right[i] * f;
+static inline void vec_div_scalar(float *restrict left, const uint32_t *restrict right, int scalar, int n)
+{
+    float f = 1.0 / scalar;
+    for (int i = 0; i < n; i++)
+    {
+        left[i] = right[i] * f;
     }
 }
 
-
-static inline void vec_sub_to_1_hp(uint32_t* restrict left, uint32_t* restrict right, int n, uint32_t hp){
-    for (int i = 0; i < n; i++){
+static inline void vec_sub_to_1_hp(uint32_t *restrict left, uint32_t *restrict right, int n, uint32_t hp)
+{
+    for (int i = 0; i < n; i++)
+    {
         int dmg = MIN((hp - 1), right[i]);
+        dmg = MIN(dmg, left[i]);
         left[i] -= dmg;
         right[i] -= dmg;
     }
 }
 
-
-static inline void vec_sub_to_0_hp(uint32_t* restrict left, uint32_t* restrict right, int n){
-    for (int i = 0; i < n; i++){
+static inline void vec_sub_to_0_hp(uint32_t *restrict left, uint32_t *restrict right, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
         int dmg = MIN(left[i], right[i]);
         left[i] -= dmg;
         right[i] -= dmg;
     }
 }
 
-static inline int vec_n_components(const uint32_t* restrict left, int n){
-    int cnt = 0; 
-    for (int i = 0; i < n; i++){
-        if (left[i] > 0){
+static inline int vec_n_components(const uint32_t *restrict left, int n)
+{
+    int cnt = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (left[i] > 0)
+        {
             cnt += 1;
         }
     }
@@ -80,4 +93,3 @@ static inline int vec_n_components(const uint32_t* restrict left, int n){
 }
 
 #endif
-

@@ -15,6 +15,7 @@ migrate_working_dir/
 src/CMakeFiles/
 src/CMakeCache.txt
 src/C_WRDICE
+example/android/app/.gradle
 
 # IntelliJ related
 *.iml
